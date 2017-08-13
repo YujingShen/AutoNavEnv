@@ -16,23 +16,6 @@ class AutoNavEnv(object):
         self.env_name = ''
         self.room_map = dict()
 
-    def __move(self, delta):
-        npos = [self._pos[0], self._pos[1]]
-        if self._dir == 0:
-            npos[0] += delta
-        elif self._dir == 1:
-            npos[1] += delta
-        elif self._dir == 2:
-            npos[0] -= delta
-        else:
-            npos[1] -= delta
-
-        if (npos[0], npos[1]) in self.room_map:
-            self._pos = npos
-            return True
-        else:
-            return False
-
     def dir2name(self, direction=None):
         if direction is None:
             direction = self._dir
@@ -127,6 +110,23 @@ class AutoNavEnv(object):
         cv2.imshow("AutoNav", np.uint8(img))
         cv2.waitKey(1)
 
+    def __move(self, delta):
+        npos = [self._pos[0], self._pos[1]]
+        if self._dir == 0:
+            npos[0] += delta
+        elif self._dir == 1:
+            npos[1] += delta
+        elif self._dir == 2:
+            npos[0] -= delta
+        else:
+            npos[1] -= delta
+
+        if (npos[0], npos[1]) in self.room_map:
+            self._pos = npos
+            return True
+        else:
+            return False
+
     def step(self, action):
         """
         :param action: 0 forward 1 backward 2 turn left 3 turn right
@@ -165,14 +165,13 @@ if __name__ == "__main__":
     observation = env.reset()
     #
     import random
-    import time
-    for i in range(1000):
+    for i in range(100):
         a = random.randint(0, 3)
         env.step(a)
         print(i, 'step', a, env._pos, env._dir)
         env.render()
 
-    cv2.destroyAllWindows()
+    # cv2.destroyAllWindows()
 
 
 
